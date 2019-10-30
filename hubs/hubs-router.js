@@ -81,7 +81,7 @@ router.post('/', (req, res) => {
 
     Hubs.insert(info)
     .then(newPost => {
-        res.status(201).json(newPost)
+        res.status(201).json(info)
     })
     .catch(error => {
         console.log(error);
@@ -106,7 +106,7 @@ router.post('/:id/comments', (req, res) => {
         if(newPost.length === 0){
             res.status(404).json({ message: "The post with the specified ID does not exist." })
         } else {
-            res.status(201).json(newPost)
+            res.status(201).json(info)
         }
     })
     .catch(error => {
