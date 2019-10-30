@@ -54,24 +54,24 @@ router.get('/:id/comments', (req, res) => {
       })
 })
 
-router.get('/:id/comments', (req, res) => {
-    const id = req.params.id
+// router.get('/:id/comments', (req, res) => {
+//     const id = req.params.id
 
-    Hubs.findCommentById(id)
-    .then(commentID => {
-        if(commentID.length === 0) {
-            res.status(404).json({ message: "The post with the specified ID does not exist." })
-        } else {
-            res.status(200).json(commentID)
-        }
-    })
-    .catch(error => {
-        console.log(error);
-        res.status(500).json({
-            error: "The post information could not be retrieved." 
-        })
-      })
-})
+//     Hubs.findCommentById(id)
+//     .then(commentID => {
+//         if(commentID.length === 0) {
+//             res.status(404).json({ message: "The post with the specified ID does not exist." })
+//         } else {
+//             res.status(200).json(commentID)
+//         }
+//     })
+//     .catch(error => {
+//         console.log(error);
+//         res.status(500).json({
+//             error: "The post information could not be retrieved." 
+//         })
+//       })
+// })
 
 router.post('/', (req, res) => {
     const info = req.body
@@ -94,19 +94,21 @@ router.post('/', (req, res) => {
 router.post('/:id/comments', (req, res) => {
     const id = req.params.id 
     const info = req.body
-    const { text, post_id } = info
+    const { text } = info
+    const newObj = {post_id: id, ...info}
+    console.log(info)
     
 
     if(!text) res.status(400).json({ errorMessage: "Please provide text for the comment." })
     console.log(id)
 
-    Hubs.insertComment(info)
+    Hubs.insertComment(newObj)
     .then(newPost => {
         console.log(newPost)
         if(newPost.length === 0){
             res.status(404).json({ message: "The post with the specified ID does not exist." })
         } else {
-            res.status(201).json(info)
+            res.status(201).json(newObj)
         }
     })
     .catch(error => {
@@ -163,3 +165,30 @@ router.put('/:id', (req, res) => {
 })
 
 module.exports = router;
+
+// router.post('/:id/comments', (req, res) => {
+//     const id = req.params.id 
+//     const info = req.body
+//     const { text } = info
+//     const newObj = {post_id: id, ...info}
+//     console.log(info)
+    
+
+//     if(!text) res.status(400).json({ errorMessage: "Please provide text for the comment." })
+//     console.log(id)
+
+//     Hubs.insertComment(newObj)
+//     .then(newPost => {
+//         console.log(newPost)
+//         if(newPost.length === 0){
+//             res.status(404).json({ message: "The post with the specified ID does not exist." })
+//         } else {
+//             res.status(201).json(newObj)
+//         }
+//     })
+//     .catch(error => {
+//         console.log(error);
+//         res.status(500).json({
+//             error: "There was an error while saving the post to the database"
+//         })
+//       })
